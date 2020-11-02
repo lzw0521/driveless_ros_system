@@ -1,0 +1,10 @@
+kv: 0.7            #线速度比例系数
+kp: 0.6            #前轮转角比例系数
+kd: 2.0            #前轮转角微分系数
+turnRadius: 6.0    #转弯半径
+carLength: 8.0     #轴距
+carWidth: 6.0      #轮距
+Path_width: 5.0    #耕宽
+zoom_distance: 1.0 #地头宽度
+lookahead: 3.0     #跟踪点距离
+

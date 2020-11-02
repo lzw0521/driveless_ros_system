@@ -1,0 +1,48 @@
+//解析
+std::string s = msg.data.c_str();
+rapidjson::Document doc;
+if(!doc.Parse(s.data()).HasParseError())
+{
+    if(doc.HasMember("shapes") && doc["shapes"].IsArray())
+    {
+        const rapidjson::Value &array = doc["shapes"];
+        size_t len = array.Size();
+        for(size_t i=0; i< len;i++)
+        {
+            const rapidjson::Value &object = array[i];
+            size_t len2 = object.Size();
+            for (size_t j =0;j < len2;j++)
+            {
+                const rapidjson::Value &object2 = object[j];
+                double lat =0;
+                double lng =0;
+                if(object2.IsObject())
+                {
+                    if (object2.HasMember("lat") && object2["lat"].IsDouble())
+                        {
+                            lat = object2["lat"].GetDouble();
+                            cout << "lat=" << object2["lat"].GetDouble();
+                        }
+                        if (object2.HasMember("lng") && object2["lng"].IsDouble())
+                        {
+                            lng = object2["lng"].GetDouble();
+                            cout << ", lng=" << object2["lng"].GetDouble() << endl;
+                        }
+                        manual_point.points[i].x = lat    ; //纬度
+                        manual_point.points[i].y = lng   ; //经度
+                        double UTM_N;
+                        double UTM_E;
+                        std::string zone;
+                        gps_common::LLtoUTM(lat, lng, UTM_N, UTM_E, zone);
+                        geometry_msgs::Point32 pBuf;
+                        pBuf.x = UTM_E;
+                        pBuf.y = UTM_N;
+                        if (j == 0)
+                        {
+                            offset_x_ = UTM_E - 100.0;
+                            offset_y_ = UTM_N - 100.0;
+                        }
+                        pBuf.x = UTM_E ;//- offset_x_;
+                        pBuf.y = UTM_N ;//- offset_y_;
+                        //srv_.request.polygon.push_back(pBuf);
+                        new_poly

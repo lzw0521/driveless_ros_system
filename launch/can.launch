@@ -1,0 +1,3 @@
+<launch>
+     <node name="canpublish" pkg="canpublish" type="canpublish" output="screen"/>
+</launch>

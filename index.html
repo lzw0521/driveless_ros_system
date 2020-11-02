@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>test html</title>
+    <!--    <script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>-->
+    <link href='http://localhost:3000/bigemap.js/v2.1.0/bigemap.css' rel='stylesheet' />
+    <script src='http://localhost:3000/bigemap.js/v2.1.0/bigemap.js'></script>
+    <script src="Public/roslib/roslib.min.js"></script>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--        <link href="https://cdn.bootcss.com/Buttons/2.0.0/css/buttons.min.css" rel="stylesheet">-->
+    <!--
+     以下CSS地址请在安装软件了替换成本地的地址
+     CSS地址请使用:
+     http://localhost:9000/bigemap.js/v2.1.0/bigemap.css
+     JS地址请使用：
+     http://localhost:9000/bigemap.js/v2.1.0/bigemap.js
+     软件下载地址 http://www.bigemap.com/reader/download/detail201802017.html
+    -->
+    <!--<link href='http://www.bigemap.com:9000/bigemap.js/v2.1.0/bigemap.css' rel='stylesheet' />-->
+    <!--<script src='http://www.bigemap.com:9000/bigemap.js/v2.1.0/bigemap.js'></script>-->
+    <!--引入鼠标绘制的JS+CSS-->
+    <!--对应下面的CSS+JS的下载地址 请直接访问 http://bigemap.com/Public/mouse_draw/mouse_draw.zip 来下载-->
+    <link rel="stylesheet" href="Public/mouse_draw/Bigemap.draw.css" />
+    <script charset="utf-8" src="Public/mouse_draw/Bigemap.draw.js"></script>
+    <script charset="utf-8" src="Public/mouse_draw/Bigemap.Draw.Event.js"></script>
+
+    <script src="Public/mouse_draw/draw/handler/Draw.Feature.js"></script>
+    <script src="Public/mouse_draw/draw/handler/Draw.Polyline.js"></script>
+    <script src="Public/mouse_draw/draw/handler/Draw.Polygon.js"></script>
+    <script src="Public/mouse_draw/draw/handler/Draw.SimpleShape.js"></script>
+    <script src="Public/mouse_draw/draw/handler/Draw.Rectangle.js"></script>
+    <script src="Public/mouse_draw/draw/handler/Draw.Circle.js"></script>
+    <script src="Public/mouse_draw/draw/handler/Draw.Marker.js"></script>
+    <script src="Public/mouse_draw/draw/handler/Draw.CircleMarker.js"></script>
+
+    <script src="Public/mouse_draw/edit/handler/Edit.Poly.js"></script>
+    <script src="Public/mouse_draw/edit/handler/Edit.SimpleShape.js"></script>
+    <script src="Public/mouse_draw/edit/handler/Edit.Rectangle.js"></script>
+    <script src="Public/mouse_draw/edit/handler/Edit.Marker.js"></script>
+    <script src="Public/mouse_draw/edit/handler/Edit.CircleMarker.js"></script>
+    <script src="Public/mouse_draw/edit/handler/Edit.Circle.js"></script>
+
+
+    <script src="Public/mouse_draw/ext/TouchEvents.js"></script>
+    <script src="Public/mouse_draw/ext/LatLngUtil.js"></script>
+    <script src="Public/mouse_draw/ext/GeometryUtil.js"></script>
+    <script src="Public/mouse_draw/ext/LineUtil.Intersect.js"></script>
+    <script src="Public/mouse_draw/ext/Polyline.Intersect.js"></script>
+    <script src="Public/mouse_draw/ext/Polygon.Intersect.js"></script>
+
+    <script src="Public/mouse_draw/Control.Draw.js"></script>
+    <script src="Public/mouse_draw/Tooltip.js"></script>
+    <script src="Public/mouse_draw/Toolbar.js"></script>
+
+    <script src="Public/mouse_draw/draw/DrawToolbar.js"></script>
+    <script src="Public/mouse_draw/edit/EditToolbar.js"></script>
+    <script src="Public/mouse_draw/edit/handler/EditToolbar.Edit.js"></script>
+    <script src="Public/mouse_draw/edit/handler/EditToolbar.Delete.js"></script>
+</head>
+<style type="text/css">
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    html,
+    body,
+    #map {
+        width: 100%;
+        height: 100%;
+    }
+
+    #start_draw {
+        position: absolute;
+        z-index: 10;
+        right: 20px;
+        top: 10px;
+        display: inline-flexbox;
+        width: 90px;
+        /* height: fit-content; */
+    }
+
+    #start_plan {
+        position: absolute;
+        z-index: 10;
+        right: 20px;
+        top: 50px;
+        display: inline-block;
+        width: 90px;
+        /* height: fit-content; */
+
+    }
+
+    #clean_draw {
+        position: absolute;
+        z-index: 10;
+        right: 20px;
+        top: 90px;
+        display: inline-block;
+        width: 90px;
+        /* height: fit-content; */
+    }
+
+    #start_marker {
+        position: absolute;
+        z-index: 10;
+        right: 20px;
+        top: 10px;
+        display: inline-block;
+        width: 90px;
+    }
+
+    #start_marker_plan {
+        position: absolute;
+        z-index: 10;
+        right: 20px;
+        top: 50px;
+        display: inline-block;
+        width: 90px;
+    }
+
+    #clean_marker {
+        position: absolute;
+        z-index: 10;
+        right: 20px;
+        top: 90px;
+        display: inline-block;
+        width: 90px;
+    }
+
+    #path_direction_switch {
+        position: absolute;
+        z-index: 10;
+        right: 0px;
+        top: 130px;
+        display: inline-block;
+        width: 70px;
+        background-color: #634ef0;
+        border-color: #634ef0;
+    }
+
+    #silver_cow_party {
+        position: absolute;
+        z-index: 10;
+        right: 70px;
+        top: 130px;
+        display: inline-block;
+        width: 70px;
+        background-color: #21c02e;
+        border-color: #634ef0;
+    }
+
+    #gyration {
+        position: absolute;
+        z-index: 10;
+        right: 140px;
+        top: 130px;
+        display: inline-block;
+        width: 70px;
+        background-color: #c021ab;
+        border-color: #634ef0;
+    }
+
+    #start_machine {
+        position: absolute;
+        z-index: 10;
+        right: 80px;
+        top: 0px;
+        display: inline-block;
+        width: 70px;
+        height: 70px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+    }
+
+    #stop_machine {
+        position: absolute;
+        z-index: 10;
+        right: 0px;
+        top: 0px;
+        display: inline-block;
+        width: 70px;
+        height: 70px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+
+    }
+
+    #stop_machine:hover {
+        background: #FFF;
+        color: #e75616;
+    }
+
+    /* #satellite {
+        position: absolute;
+        z-index: 20;
+        right: 160px;
+        top: 0px;
+        display: inline-block;
+        width: 70px;
+    }
+    #street {
+        position: absolute;
+        z-index: 20;
+        right: 240px;
+        top: 0px;
+        display: inline-block;
+        width: 70px;
+    } */
+    #up {
+        position: absolute;
+        z-index: 20;
+        right: 40px;
+        top: 260px;
+        display: inline-block;
+        width: 50px;
+        height: 30px;
+    }
+
+    #down {
+        position: absolute;
+        z-index: 20;
+        right: 40px;
+        top: 370px;
+        display: inline-block;
+        width: 50px;
+        height: 30px;
+    }
+
+    #left {
+        position: absolute;
+        z-index: 20;
+        right: 100px;
+        top: 300px;
+        display: inline-block;
+        width: 30px;
+        height: 50px;
+
+    }
+
+    #right {
+        position: absolute;
+        z-index: 20;
+        right: 0px;
+        top: 300px;
+        display: inline-block;
+        width: 30px;
+        height: 50px;
+    }
+
+    #stop {
+        position: absolute;
+        z-index: 20;
+        right: 40px;
+        top: 300px;
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+
+    }
+
+    #trumpet {
+        position: absolute;
+        z-index: 20;
+        right: 45px;
+        top: 700px;
+        display: inline-block;
+        width: 50px;
+        height: 40px;
+        background-color: #df70d0;
+        border-color: #d4cad4;
+    }
+
+    #work_mode {
+        position: absolute;
+        z-index: 10;
+        right: 20px;
+        top: 600px;
+        display: inline-block;
+        width: 90px;
+        background-color: #df7b1d;
+        border-color: #df7b1d;
+    }
+
+    #nav_mode {
+        position: absolute;
+        z-index: 10;
+        right: 20px;
+        top: 650px;
+        display: inline-block;
+        width: 90px;
+        background-color: #4e7eb4;
+        border-color: #4f78a7;
+    }
+</style>
+<style>
+    #control_polygon {
+        background-color: rgba(0, 0, 0, 0.301);
+        padding: 80px;
+        position: absolute;
+        top: 80px;
+        right: 0px;
+        z-index: 10;
+
+    }
+
+    #control_marker {
+        background-color: rgba(0, 0, 0, 0.301);
+        padding: 70px;
+        position: absolute;
+        top: 440px;
+        right: 0px;
+        z-index: 10;
+    }
+
+    #control_edit {
+        background-color: rgba(235, 229, 229, 0.301);
+        padding: 8px;
+        position: absolute;
+        top: 0px;
+        left: 35px;
+        z-index: 10;
+    }
+</style>
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+<div id="control_polygon">
+
+    <button id="start_draw" class="btn btn-sm btn-default">绘制作业区域</button>
+    <button id="start_plan" class="btn btn-sm btn-primary">路径规划</button>
+    <button id="clean_draw" class="btn btn-sm btn-warning">区域清除</button>
+    <button id="path_direction_switch" class="btn btn-sm btn-warning">方向切换</button>
+    <button id="silver_cow_party" class="btn btn-sm btn-warning">往返路径</button>
+    <button id="gyration" class="btn btn-sm btn-warning">回形路径</button>
+</div>
+
+<button id="start_machine" class="btn btn-sm btn-success">农机启动</button>
+<button id="stop_machine" class="btn btn-w3r btn-danger">农机停止</button>
+<div id="control_marker">
+    <button id="start_marker" class="btn btn-sm btn-default">绘制目标点</button>
+    <button id="start_marker_plan" class="btn btn-sm btn-primary">发送目标点</button>
+    <button id="clean_marker" class="btn btn-sm btn-warning">清除目标点</button>
+</div>
+<!-- <button id="satellite" class="btn btn-tiny  btn-primary">卫星地图</button>
+<button id="street" class="btn btn-tiny  btn-primary">电子地图</button> -->
+<button id="up" class="btn btn-sm btn-default">前进</button>
+<button id="down" class="btn btn-sm btn-default">后退</button>
+<button id="left" class="btn btn-sm btn-default">左</button>
+<button id="right" class="btn btn-sm btn-default">右</button>
+<button id="stop" class="btn btn-sm btn-danger">停止</button>
+<button id="trumpet" class="btn btn-sm btn-danger">喇叭</button>
+<button id="work_mode" class="btn btn-sm btn-default">工作模式</button>
+<button id="nav_mode" class="btn btn-sm btn-default">导航模式</button>
+<div id="map"></div>
+<div id="control_edit">
+    <label id=“label” for="input_point"><b>坐标： lat , lng</b></label><br>
+    <!-- <form> -->
+    P1: <input type="text" id="P1" value="37.2958722868,118.640505894"><br>
+    P2: <input type="text" id="P2" value="37.29555754,118.640496654"><br>
+    P3: <input type="text" id="P3" value="37.2955493908,118.639524134"><br>
+    P4: <input type="text" id="P4" value="37.2958523162,118.639494812"><br>
+    <b>
+        <p align="center"><input type="submit" value="绘制打点区域" onclick="fun()"></p>
+    </b>
+    <!-- </form> -->
+</div>
+<script>
+    BM.Config.HTTP_URL = 'http://localhost:3000';
+    var ros = new ROSLIB.Ros({
+        url: 'ws://localhost:9090'
+    });
+
+    ros.on('connection', function () {
+        console.log('Connected to websocket server.');
+    });
+
+    ros.on('error', function (error) {
+        console.log('Error connecting to websocket server: ', error);
+    });
+
+    ros.on('close', function () {
+        console.log('Connection to websocket server closed.');
+    });
+
+    var cmdStartTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/satellite_map/start',
+        messageType: 'std_msgs/String'
+    });
+
+    var cmdStopTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/satellite_map/stop',
+        messageType: 'std_msgs/String'
+    });
+    var gpsSendTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/satellite_map/gps_polygon',
+        messageType: 'std_msgs/String'
+    });
+    var pointsSendTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/manual_mode',
+        messageType: 'std_msgs/String'
+    });
+    var gpsClearSendTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/satellite_map/clear_polygon',
+        messageType: 'std_msgs/String'
+    });
+    var gpsMarkerSendTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/satellite_map/gps_target',
+        messageType: 'std_msgs/String'
+    });
+    var trumpetSendTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/satellite_map/trumpet_start-up',
+        messageType: 'std_msgs/String'
+    });
+    var pathdirectionswitchSendTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/pathdirectionswitch',
+        messageType: 'std_msgs/String'
+    });
+    var silver_cow_partySendTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/pathcoveragemode',
+        messageType: 'std_msgs/String'
+    });
+    var gyrationSendTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/pathrotatemode',
+        messageType: 'std_msgs/String'
+    });
+    var gpsReceiveTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/satellite_map/gps_current',
+        messageType: 'std_msgs/String'
+    });
+    var path_ReceiveTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/satellite_map/gps_coverage_path_final',
+        messageType: 'std_msgs/String'
+    });
+    var cmdVel = new ROSLIB.Topic({
+        ros: ros,
+        name: '/cmd_vel',
+        messageType: 'geometry_msgs/Twist'
+    });
+    var work_modeSendTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/satellite_map/work_mode',
+        messageType: 'std_msgs/String'
+    });
+    var nav_modeSendTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/satellite_map/nav_mode',
+        messageType: 'std_msgs/String'
+    });
+
+    function fun() {
+        str_p1 = document.querySelector('#P1').value
+        str_p2 = document.querySelector('#P2').value
+        str_p3 = document.querySelector('#P3').value
+        str_p4 = document.querySelector('#P4').value
+        xyp1 = str_p1.split(",")
+        xyp2 = str_p2.split(",")
+        xyp3 = str_p3.split(",")
+        xyp4 = str_p4.split(",")
+        var poly = [
+            [Number(xyp1[0]), Number(xyp1[1])],
+            [Number(xyp2[0]), Number(xyp2[1])],
+            [Number(xyp3[0]), Number(xyp3[1])],
+            [Number(xyp4[0]), Number(xyp4[1])]
+        ]
+
+        polys = BM.polygon(poly, { color: 'red', }).addTo(map)
+        let json = {}
+        let shapes = []
+        let shape = []
+
+        for (let i = 0; i < 4; i++) {
+            let points = {}
+            points.lat = poly[i][0]
+            points.lng = poly[i][1]
+            shape.push(points)
+        }
+        shapes.push(shape)
+        json.shapes = shapes
+        let msg = new ROSLIB.Message({
+            data: JSON.stringify(json)
+        })
+        pointsSendTopic.publish(msg)
+        alert('已发送打点坐标')
+    }
+
+    var polylinepath;
+    path_ReceiveTopic.subscribe(function (msg) {
+        console.log('received msg: ' + msg.data);
+        points_js = eval(' (' + msg.data + ')');
+        let path = []
+        for (let i in points_js.shapes) {
+            path[i] = [points_js.shapes[i].lat, points_js.shapes[i].lng];
+           //BM.point(path[i]).addTo(map);
+           BM.circleMarker(path[i], { radius: 0.5, color: 'blue' }).addTo(map);
+        }
+        //polylinepath = BM.polyline(path, { color: 'red' }).addTo(map)
+    }
+    )
+
+    gpsReceiveTopic.subscribe(function (msg) {
+        console.log('received msg: ' + msg.data);
+        point = eval('(' + msg.data + ')');
+        if (point.lat !== "" && point.lng !== "") {
+            map.panTo([point.lat, point.lng], { animate: true, duration: 0.5 });
+            BM.circleMarker([point.lat, point.lng], { radius: 0.5, color: 'blue' }).addTo(map);
+        }
+    })
+
+
+    // 在ID为map的元素中实例化一个地图，并设置地图的ID号为 bigemap.googlemap-streets，ID号程序自动生成，无需手动配置，并设置地图的投影为百度地图 ，中心点，默认的级别和显示级别控件
+    var map = BM.map('map', 'bigemap.googlemapen-satellite', {
+        center: [37.295941, 118.639786],
+        zoom: 15,
+        zoomControl: true
+    });
+    /*var map = BM.map('map', 'bigemap.googlemapen-satellite', {
+		center: [37.313186, 118.6500], 
+		zoom: 15, 
+		zoomControl: true
+		});*/
+    //创建卫星图层
+    var google_satellite = BM.tileLayer('bigemap.googlemapen-satellite');
+    var google_street = BM.tileLayer('bigemap.googlemap-streets');
+    /* document.querySelector('#satellite').onclick = function () {
+        //先移除一个图层 ，再添加一个图层
+ 	    google_street.remove(map);
+        google_satellite.addTo(map);
+
+    };
+
+    document.querySelector('#street').onclick = function () {
+        google_satellite.remove(map);
+	google_street.addTo(map);
+	
+        
+    }; */
+
+    /*  var latlngs = [
+             [30, 102.68],
+             [33, 108.43],
+             [37.04, 118.2]
+         ];
+         polylinepath= BM.polyline(latlngs,{color:'red'}).addTo(map) */
+    //创建一个图形覆盖物的集合来保存点线面
+    var drawnItems_polygon = new BM.FeatureGroup();
+    var drawnItems_point = new BM.FeatureGroup();
+    //添加在地图上
+    map.addLayer(drawnItems_polygon);
+    map.addLayer(drawnItems_point);
+
+    //监听绘画完成事件
+    var layer
+    map.on(BM.Draw.Event.CREATED, function (e) {
+        layer = e.layer;
+        var type = e.layerType;
+        if (type === 'marker') {
+            layer.bindPopup('' + layer._latlng);
+            //alert(layer._latlng)
+            drawnItems_point.addLayer(layer);
+        } else {
+            drawnItems_polygon.addLayer(layer);
+        }
+    });
+    //设置一个变量来保存当前的绘制对象
+    var draw;
+    document.querySelector('#start_draw').onclick = function () {
+        if (!draw) {
+            draw = new BM.Draw.Polygon(map);
+        }
+        draw.enable();
+    }
+    var draw_point;
+    document.querySelector('#start_marker').onclick = function () {
+        if (!draw_point) {
+            draw_point = new BM.Draw.Marker(map/*,{icon: myIcon}*/);
+        }
+        draw_point.enable();
+
+    }
+
+    document.querySelector('#clean_marker').onclick = function () {
+        if (!draw_point) {
+            alert("当前界面为空！")
+        } else {
+            map.removeLayer(drawnItems_point)
+            draw_point = null
+            drawnItems_point = new BM.FeatureGroup();
+            map.addLayer(drawnItems_point)
+            alert("清除完毕！")
+        }
+    }
+
+    document.querySelector('#clean_draw').onclick = function () {
+        if (!draw) {
+            alert("当前界面为空！")
+        } else {
+            map.removeLayer(drawnItems_polygon)
+            draw = null
+            drawnItems_polygon = new BM.FeatureGroup();
+            map.addLayer(drawnItems_polygon)
+            alert("清除完毕！")
+            let msg = new ROSLIB.Message({
+                data: "clear polygon"
+            });
+            gpsClearSendTopic.publish(msg)
+        }
+       
+        polylinepath.remove();
+        poly.remove();
+    }
+    document.querySelector('#path_direction_switch').onclick = function () {
+        let msg = new ROSLIB.Message({
+            data: "path switch"
+        });
+        pathdirectionswitchSendTopic.publish(msg)
+        polylinepath.remove();
+
+    }
+    document.querySelector('#silver_cow_party').onclick = function () {
+        let msg = new ROSLIB.Message({
+            data: "test1"
+        });
+        silver_cow_partySendTopic.publish(msg)
+        polylinepath.remove();
+
+    }
+    document.querySelector('#gyration').onclick = function () {
+        let msg = new ROSLIB.Message({
+            data: "test2"
+        });
+        gyrationSendTopic.publish(msg)
+        polylinepath.remove();
+
+    }
+    document.querySelector('#start_plan').onclick = function () {
+        if (draw) {
+            let json = {}
+            let shapes = []
+            let keys = Object.getOwnPropertyNames(drawnItems_polygon._layers);
+            for (let key in keys) {
+                let points = drawnItems_polygon._layers[keys[key]]._latlngs[0]
+                let pointsKeys = Object.getOwnPropertyNames(points)
+                let shape = []
+                for (let pointKey in pointsKeys) {
+                    let point = points[pointKey];
+                    let newPoint = {}
+                    if (point !== undefined) {
+                        newPoint.lat = point.lat
+                        newPoint.lng = point.lng
+                        shape.push(newPoint)
+                    }
+                }
+                shapes.push(shape)
+            }
+            json.shapes = shapes
+            let msg = new ROSLIB.Message({
+                data: JSON.stringify(json)
+            })
+            gpsSendTopic.publish(msg)
+            alert('已发送多边形数据')
+        } else {
+            alert('请点击\'绘制多边形按钮\'绘制边框')
+        }
+    }
+
+    document.querySelector('#start_marker_plan').onclick = function () {
+        let msg = new ROSLIB.Message({
+            data: JSON.stringify(layer._latlng)
+        });
+        alert(msg.data)
+        gpsMarkerSendTopic.publish(msg)
+        alert("目标点已发送！")
+    }
+
+    document.querySelector('#start_machine').onclick = function () {
+        let msg = new ROSLIB.Message({
+            data: "start_machine"
+        });
+        cmdStartTopic.publish(msg)
+        alert("鸿鹄T30，启动！")
+    }
+    document.querySelector('#stop_machine').onclick = function () {
+        let msg = new ROSLIB.Message({
+            data: "stop_machine"
+        });
+        cmdStopTopic.publish(msg)
+        alert("鸿鹄T30，停止！")
+    }
+    document.querySelector('#work_mode').onclick = function () {
+        let msg = new ROSLIB.Message({
+            data: "work_mode"
+        });
+        work_modeSendTopic.publish(msg)
+        alert("工作模式")
+    }
+    document.querySelector('#nav_mode').onclick = function () {
+        let msg = new ROSLIB.Message({
+            data: "nav_mode"
+        });
+        nav_modeSendTopic.publish(msg)
+        alert("导航模式")
+    }
+    var sound;
+    document.querySelector('#trumpet').onclick = function () {
+        if (!sound) {
+            sleep(1000);
+        }
+        else {
+            sound = 1;
+            sleep(2000);
+        }
+        let msg = new ROSLIB.Message({
+            data: "trumpet"
+        });
+        cmdStopTopic.publish(msg)
+        alert("请注意！")
+    }
+    document.querySelector('#up').onclick = function () {
+        var twist = new ROSLIB.Message({
+            linear: {
+                x: 0.5,
+                y: 0.0,
+                z: 0.0
+            },
+            angular: {
+                x: -0.0,
+                y: -0.0,
+                z: -0.0
+            }
+        });
+        //while(1)
+        //{
+        cmdVel.publish(twist);
+        //}
+    }
+    document.querySelector('#down').onclick = function () {
+        var twist = new ROSLIB.Message({
+            linear: {
+                x: -0.5,
+                y: 0.0,
+                z: 0.0
+            },
+            angular: {
+                x: -0.0,
+                y: -0.0,
+                z: -0.0
+            }
+        });
+        cmdVel.publish(twist);
+    }
+    document.querySelector('#left').onclick = function () {
+        var twist = new ROSLIB.Message({
+            linear: {
+                x: 0.5,
+                y: 0.0,
+                z: 0.0
+            },
+            angular: {
+                x: -0.0,
+                y: -0.0,
+                z: -0.26
+            }
+        });
+        cmdVel.publish(twist);
+    }
+    document.querySelector('#right').onclick = function () {
+        var twist = new ROSLIB.Message({
+            linear: {
+                x: 0.5,
+                y: 0.0,
+                z: 0.0
+            },
+            angular: {
+                x: -0.0,
+                y: -0.0,
+                z: 0.26
+            }
+        });
+        cmdVel.publish(twist);
+    }
+    document.querySelector('#stop').onclick = function () {
+        var twist = new ROSLIB.Message({
+            linear: {
+                x: 0.0,
+                y: 0.0,
+                z: 0.0
+            },
+            angular: {
+                x: -0.0,
+                y: -0.0,
+                z: -0.0
+            }
+        });
+        cmdVel.publish(twist);
+        alert("鸿鹄T30，停止！")
+    }
+
+</script>
+</body>
+
+</html>

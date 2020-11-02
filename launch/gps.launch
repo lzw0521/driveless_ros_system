@@ -1,0 +1,6 @@
+<launch>
+    <node name="gps_node" pkg="gps" type="gps_node" output="screen">
+    <param name="Port_GPS" type="string" value="/dev/ttyUSB1"/>
+    </node>
+   
+</launch>

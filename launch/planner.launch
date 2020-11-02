@@ -1,0 +1,7 @@
+<launch>
+    <node name="planner" pkg="coverage_planner" type="planner" output="screen">
+    <rosparam file="$(find coverage_planner)/config/planner.yaml" />
+    </node>
+</launch>
+
+  
